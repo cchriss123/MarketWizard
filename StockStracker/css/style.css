@@ -1,0 +1,35 @@
+body {
+    font-family: 'Merriweather', 'sans-serif';
+    color: white;
+    background-color: rgb(42,42,42);
+    margin: 0;
+    /* background: linear-gradient(to bottom, rgb(26,100,45), rgb(7,26,11)); */
+   
+    min-height: 100vh;
+
+    
+    
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+    font-family: 'Merriweather', 'serif';
+    padding-top: 50px;
+}
+
+.line {
+    border-bottom: 1px solid white;
+}
+
+
+
+
+
+
+
+
+
+
+  
+
