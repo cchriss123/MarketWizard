@@ -1,5 +1,4 @@
 //localStorage.clear();
-let apiKey;
 const searchInput = document.getElementById('search-input');
 const resultDiv = document.getElementById('result-label');
 const searchResultsDiv = document.getElementById('results');
@@ -10,7 +9,7 @@ initializePage();
 
 
 async function initializePage() {
-    await fetchAPIKey();
+    let apiKey = await fetchAPIKey();
     // displaySearchResults(getMockData());
     
 }
@@ -35,12 +34,12 @@ function searchSummit(event) {
         return; 
     }
     
-    fetch(endpoint)
-        .then(response => response.json())
-        .then( displaySearchResults)
-        .catch(error => console.log(error));
+    // fetch(endpoint)
+    //     .then(response => response.json())
+    //     .then( displaySearchResults)
+    //     .catch(error => console.log(error));
 
-    // getMockData().then(displaySearchResults);
+    getMockData().then(displaySearchResults);
 }  
 
 function displaySearchResults(data) {

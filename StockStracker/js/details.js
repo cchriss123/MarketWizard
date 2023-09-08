@@ -3,12 +3,9 @@ let storedStockInfo = JSON.parse(localStorage.getItem("currentStock"));
 let stockSymbol = storedStockInfo["1. symbol"];
 let stockName = storedStockInfo["2. name"];
 let stockCurrency = storedStockInfo["8. currency"];
-let fundamentalsFromSymbol = JSON.parse(
-  localStorage.getItem(`fundamentalsFrom${stockSymbol}`)
-);
-document.querySelector("h1").textContent = stockSymbol
-  ? stockName
-  : "Symbol not found.";
+let fundamentalsFromSymbol = JSON.parse(localStorage.getItem(`fundamentalsFrom${stockSymbol}`));
+let weeklyDataInMemory;
+document.querySelector("h1").textContent = stockSymbol? stockName: "Symbol not found.";
 initializePage();
 
 async function initializePage() {
@@ -25,9 +22,7 @@ async function fetchAPIKey() {
 
 function displayStockDescription(data) {
   let descriptionDiv = document.getElementById("description");
-  let description = data.Description
-    ? data.Description
-    : "Description not available";
+  let description = data.Description? data.Description : "Description not available";
   descriptionDiv.innerHTML = `<div>${description}</div>`;
 }
 
@@ -94,7 +89,7 @@ function fetchStockData(apiKey) {
   //   `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`
   // )
   //   .then((response) => response.json())
-  //   .then((data) => displayGraph(data))
+  //   .then((data) => spliceFromDate(data, new Date(1983,8,7)))
   //   .catch((error) => console.log(error));
 
   // fetch(
@@ -104,33 +99,15 @@ function fetchStockData(apiKey) {
   //   .then((data) => displayIntraday(data))
   //   .catch((error) => console.log(error));
 
-  getHistoryMock().then(data => {
-    const dates = Object.keys(data["Weekly Adjusted Time Series"]).reverse();
-    const values = Object.values(data["Weekly Adjusted Time Series"]).map((close) => close["5. adjusted close"])
-    .map((value) => Number(value))
-    .reverse()
-    return ([dates, values])
-  }).then(displayGraph)
+  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
   getIntradayMock().then(displayIntraday);
   getFundamentalsMock().then(displayStockDescription);
   getFundamentalsMock().then(displayKeyStockInfo);
 }
 
 function displayGraph([dates, adjustedCloses]) {
-
-  // let adjustedCloses = Object.values(data["Weekly Adjusted Time Series"])
-  //   .map((close) => close["5. adjusted close"])
-  //   .map((value) => Number(value))
-  //   .reverse();
-
-  let isPositive =
-    adjustedCloses[adjustedCloses.length - 1] > adjustedCloses[0];
+  let isPositive = adjustedCloses[adjustedCloses.length - 1] > adjustedCloses[0];
   let color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
-
-  // TODO!!adjustedCloses = adjustedCloses.filter(close => close.)
-
-  // let dates = Object.keys(data["Weekly Adjusted Time Series"]).reverse();
-
   const ctx = document.getElementById("my-canvas");
 
   console.log("Oldest Adjusted Close:", adjustedCloses[0]);
@@ -188,6 +165,15 @@ function displayGraph([dates, adjustedCloses]) {
   });
 }
 
+function spliceWeeklySeries(data, startDate) {
+  weeklyDataInMemory = data;
+  const weeklyAdjusted = data["Weekly Adjusted Time Series"];
+  const dates = Object.keys(weeklyAdjusted).filter((date) => startDate < new Date(date)).reverse();
+  const values = Object.values(weeklyAdjusted).slice(0, dates.length).map((week) => Number(week["5. adjusted close"])).reverse();
+
+  displayGraph([dates, values]);
+}
+
 function displayIntraday(data) {
   let topContainerDiv = document.getElementById("change");
   let intradayDataDiv = document.getElementById("intraday");
@@ -204,8 +190,7 @@ function displayIntraday(data) {
 
   let lastCloseValue = parseFloat(closePrices[0]);
   let lastCloseDisplay = lastCloseValue.toFixed(2);
-  lastCloseDisplay =
-    lastCloseDisplay.length > 7 ? lastCloseValue.toFixed(0) : lastCloseDisplay;
+  lastCloseDisplay = lastCloseDisplay.length > 7 ? lastCloseValue.toFixed(0) : lastCloseDisplay;
 
   let filterOpen = parseFloat(openingPrices[openingPrices.length - 1]);
 
@@ -237,7 +222,7 @@ async function wait(timeInMs) {
 }
 
 async function getIntradayMock() {
-  await wait(500)
+  await wait(500);
   return {
     "Meta Data": {
       "1. Information":
@@ -364,7 +349,7 @@ async function getFundamentalsMock() {
 }
 
 async function getHistoryMock() {
-  wait(500);
+  await wait(500);
   return (mockData = {
     "Meta Data": {
       "1. Information": "Weekly Adjusted Prices and Volumes",
