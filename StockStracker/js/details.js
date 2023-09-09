@@ -73,32 +73,32 @@ function fetchStockData(apiKey) {
     return;
   }
 
-  fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => {
-      localStorage.setItem(
-        `fundamentalsFrom${fundamentalsFromSymbol}`,
-        JSON.stringify(data)
-      );
-      displayStockDescription(data);
-      displayKeyStockInfo(data);
-    })
-    .catch((error) => console.log(error));
+  // fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     localStorage.setItem(
+  //       `fundamentalsFrom${fundamentalsFromSymbol}`,
+  //       JSON.stringify(data)
+  //     );
+  //     displayStockDescription(data);
+  //     displayKeyStockInfo(data);
+  //   })
+  //   .catch((error) => console.log(error));
 
-  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
-    .catch((error) => console.log(error));
+  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
+  //   .catch((error) => console.log(error));
 
-  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => displayIntraday(data))
-    .catch((error) => console.log(error));
+  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => displayIntraday(data))
+  //   .catch((error) => console.log(error));
 
-  // getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
-  // getIntradayMock().then(displayIntraday);
-  // getFundamentalsMock().then(displayStockDescription);
-  // getFundamentalsMock().then(displayKeyStockInfo);
+  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
+  getIntradayMock().then(displayIntraday);
+  getFundamentalsMock().then(displayStockDescription);
+  getFundamentalsMock().then(displayKeyStockInfo);
 
 }
 
@@ -167,6 +167,28 @@ function spliceWeeklySeries(data, startDate) {
   displayGraph([dates, values]);
 }
 
+function spiceItradayForToday() {
+
+  let data = intradayDataInMemory;
+  let latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
+
+
+  let closePriceData = data["Time Series (5min)"];
+  let closePrices = Object.keys(closePriceData)
+    .filter(timestamp => timestamp.includes(latestDate))
+    .map(timestamp => Number(closePriceData[timestamp]["4. close"]))
+    .reverse();
+
+
+  let closeTimes = Object.keys(data["Time Series (5min)"])
+    .slice(0, closePrices.length)
+    .map(timestamp => timestamp.split(" ")[1].split(":").slice(0, 2).join(":"))
+    .reverse();
+
+  displayGraph([closeTimes, closePrices]);
+}
+
+
 
 
 function setupTimeButtons(){
@@ -178,23 +200,18 @@ function setupTimeButtons(){
   let threeMonthsAgo = new Date(todaysDate-3*30*24*60*60*1000);
   
 
-  let oneWeekAgo = new Date(todaysDate-7*24*60*60*1000);
-  console.log(oneWeekAgo);
-  let oneDayAgo = new Date(todaysDate-24*60*60*1000);
-
 
   document.getElementById("max").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, thirtyDaysAgo));
   document.getElementById("five-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, fiveYearsAgo));
   document.getElementById("one-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, oneYearAgo));
   document.getElementById("three-month").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, threeMonthsAgo));
-
-
-
-
+  document.getElementById("today").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, todaysDate));
+  document.getElementById("today").addEventListener("click", () => spiceItradayForToday());
 }
 
 function displayIntraday(data) {
   
+  intradayDataInMemory = data;
   let topContainerDiv = document.getElementById("change");
   let intradayDataDiv = document.getElementById("intraday");
 
