@@ -54,8 +54,6 @@
     padding-bottom: 5px;
     color: rgb(52,199,89);
     background-color: rgb(53,53,53);
-    
-
 }
 
 .percent-change-up {
@@ -105,29 +103,83 @@
     padding: 15px;
 }
 
-
-
-
-
- .chart-container {
-    width: 500px;
-    height: 300px; 
-    background-color: rgb(53,53,53);
-    margin-bottom: 30px;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-
 .data-container {
-    grid-template-columns: 1fr 1fr;
+    width: 500px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;    
-    margin-bottom: 30px;
-
-    
+    margin-bottom: 30px;   
+    margin-left: auto;
+    margin-right: auto;   
 }
+
+
+
+
+.chart-container-outer {
+
+    background-color: rgb(53,53,53);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+}
+
+
+ .chart-container {
+    height: 350px;
+    width: 500px;  
+}
+
+
+.time-bar-container{
+    border-radius: 30px;   
+}
+
+
+   
+.time-button{
+ 
+    background-color: rgb(53, 53, 53);  
+    color: white;
+    transition: background-color 0.2s;
+    border: 2px solid; 
+    border-top-color: rgb(73, 73, 73);    
+    border-left-color: rgb(73, 73, 73);  
+    border-bottom-color: rgb(36,36,36);
+    border-right-color: rgb(36,36,36);
+    font-size: 16px;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+}
+
+.time-button:first-child {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.time-button:last-child {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .infoList {
@@ -167,6 +219,8 @@
 .btn-return:hover {
     background-color:grey;
 }
+
+
 
 
 @media screen and (min-width: 768px) {
