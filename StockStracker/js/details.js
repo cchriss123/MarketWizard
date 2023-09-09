@@ -1,9 +1,7 @@
-//localStorage.clear();
-let storedStockInfo = JSON.parse(localStorage.getItem("currentStock"));
-let stockSymbol = storedStockInfo["1. symbol"];
-let stockName = storedStockInfo["2. name"];
-let stockCurrency = storedStockInfo["8. currency"];
-let fundamentalsFromSymbol = JSON.parse(localStorage.getItem(`fundamentalsFrom${stockSymbol}`));
+const storedStockInfo = JSON.parse(localStorage.getItem("currentStock"));
+const stockSymbol = storedStockInfo["1. symbol"];
+const stockName = storedStockInfo["2. name"];
+const stockCurrency = storedStockInfo["8. currency"];
 let weeklyDataInMemory;
 let intradayDataInMemory;
 document.querySelector("h1").textContent = stockSymbol? stockName: "Symbol not found.";
@@ -23,16 +21,16 @@ async function fetchAPIKey() {
 }
 
 function displayStockDescription(data) {
-  let descriptionDiv = document.getElementById("description");
-  let description = data.Description? data.Description : "Description not available";
+  const descriptionDiv = document.getElementById("description");
+  const description = data.Description? data.Description : "Description not available";
   descriptionDiv.innerHTML = `<div>${description}</div>`;
 }
 
 function displayKeyStockInfo(data) {
-  let stockInfoDiv = document.getElementById("StockInfo");
-  let getValue = (value) => (value ? value : "N/A"); // Sets value to "N/A" if value is undefined
+  const stockInfoDiv = document.getElementById("StockInfo");
+  const getValue = (value) => (value ? value : "N/A"); // Sets value to "N/A" if value is undefined
 
-  let fundamentalsHTML = `
+  const fundamentalsHTML = `
       <div class="infoList">
           <div>Symbol:</div>
           <div>${getValue(data.Symbol)}</div>
@@ -67,44 +65,36 @@ function displayKeyStockInfo(data) {
 }
 
 function fetchStockData(apiKey) {
-  if (fundamentalsFromSymbol) {
-    displayStockDescription(fundamentalsFromSymbol);
-    displayKeyStockInfo(fundamentalsFromSymbol);
-    return;
-  }
 
-  fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => {
-      localStorage.setItem(
-        `fundamentalsFrom${fundamentalsFromSymbol}`,
-        JSON.stringify(data)
-      );
-      displayStockDescription(data);
-      displayKeyStockInfo(data);
-    })
-    .catch((error) => console.log(error));
 
-  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
-    .catch((error) => console.log(error));
+  // fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     displayStockDescription(data);
+  //     displayKeyStockInfo(data);
+  //   })
+  //   .catch((error) => console.log(error));
 
-  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
-    .then((response) => response.json())
-    .then((data) => displayIntraday(data))
-    .catch((error) => console.log(error));
+  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
+  //   .catch((error) => console.log(error));
 
-  // getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
-  // getIntradayMock().then(displayIntraday);
-  // getFundamentalsMock().then(displayStockDescription);
-  // getFundamentalsMock().then(displayKeyStockInfo);
+  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
+  //   .then((response) => response.json())
+  //   .then((data) => displayIntraday(data))
+  //   .catch((error) => console.log(error));
+
+  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
+  getIntradayMock().then(displayIntraday);
+  getFundamentalsMock().then(displayStockDescription);
+  getFundamentalsMock().then(displayKeyStockInfo);
 
 }
 
 function displayGraph([dates, closeingPrices]) {
-  let isPositive = closeingPrices[closeingPrices.length - 1] > closeingPrices[0];
-  let color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
+  const isPositive = closeingPrices[closeingPrices.length - 1] > closeingPrices[0];
+  const color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
   const ctx = document.getElementById("my-canvas");
 
   if (window.myChart) 
@@ -170,18 +160,18 @@ function spliceWeeklySeries(data, startDate) { // data argument is needed here d
 
 function spiceItradayForToday() {
 
-  let data = intradayDataInMemory;
-  let latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
+  const data = intradayDataInMemory;
+  const latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
 
 
-  let closePriceData = data["Time Series (5min)"];
-  let closePrices = Object.keys(closePriceData)
+  const closePriceData = data["Time Series (5min)"];
+  const closePrices = Object.keys(closePriceData)
     .filter(timestamp => timestamp.includes(latestDate))
     .map(timestamp => Number(closePriceData[timestamp]["4. close"]))
     .reverse();
 
 
-  let closeTimes = Object.keys(data["Time Series (5min)"])
+    const closeTimes = Object.keys(data["Time Series (5min)"])
     .slice(0, closePrices.length)
     .map(timestamp => timestamp.split(" ")[1].split(":").slice(0, 2).join(":"))
     .reverse();
@@ -191,10 +181,10 @@ function spiceItradayForToday() {
 
 
 function fullIntradayMonth() {
-  let data = intradayDataInMemory;
+  const data = intradayDataInMemory;
   const intratradeSeries = data["Time Series (5min)"];
-  let intradayMonthPrices = Object.values(intratradeSeries).map(entry => Number(entry["4. close"])).reverse();
-  let intradayMonthTimestamps = Object.keys(intratradeSeries).map(timestamp => timestamp.split(" ")[0]).reverse();
+  const intradayMonthPrices = Object.values(intratradeSeries).map(entry => Number(entry["4. close"])).reverse();
+  const intradayMonthTimestamps = Object.keys(intratradeSeries).map(timestamp => timestamp.split(" ")[0]).reverse();
 
   displayGraph([intradayMonthTimestamps, intradayMonthPrices]);
 }
@@ -203,11 +193,11 @@ function fullIntradayMonth() {
 
 function setupTimeButtons(){
 
-  let todaysDate = new Date();
-  let thirtyYearsAgo = new Date(todaysDate-30*365*24*60*60*1000);
-  let fiveYearsAgo = new Date(todaysDate-5*365*24*60*60*1000);
-  let oneYearAgo = new Date(todaysDate-365*24*60*60*1000);
-  let threeMonthsAgo = new Date(todaysDate-3*30*24*60*60*1000);
+  const todaysDate = new Date();
+  const thirtyYearsAgo = new Date(todaysDate-30*365*24*60*60*1000);
+  const fiveYearsAgo = new Date(todaysDate-5*365*24*60*60*1000);
+  const oneYearAgo = new Date(todaysDate-365*24*60*60*1000);
+  const threeMonthsAgo = new Date(todaysDate-3*30*24*60*60*1000);
   
 
   document.getElementById("max").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, thirtyYearsAgo));
@@ -221,28 +211,28 @@ function setupTimeButtons(){
 function displayIntraday(data) {
   
   intradayDataInMemory = data;
-  let topContainerDiv = document.getElementById("change");
-  let intradayDataDiv = document.getElementById("intraday");
+  const topContainerDiv = document.getElementById("change");
+  const intradayDataDiv = document.getElementById("intraday");
 
-  let latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
+  const latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
 
-  let closePrices = Object.keys(data["Time Series (5min)"])
+  const closePrices = Object.keys(data["Time Series (5min)"])
     .filter((timestamp) => timestamp.includes(latestDate))
     .map((timestamp) => data["Time Series (5min)"][timestamp]["4. close"]);
 
-  let openingPrices = Object.keys(data["Time Series (5min)"])
+  const openingPrices = Object.keys(data["Time Series (5min)"])
     .filter((timestamp) => timestamp.includes(latestDate))
     .map((timestamp) => data["Time Series (5min)"][timestamp]["1. open"]);
 
-  let lastCloseValue = parseFloat(closePrices[0]);
-  let lastCloseDisplay = lastCloseValue.toFixed(2);
+  const lastCloseValue = parseFloat(closePrices[0]);
+  const lastCloseDisplay = lastCloseValue.toFixed(2);
   lastCloseDisplay = lastCloseDisplay.length > 7 ? lastCloseValue.toFixed(0) : lastCloseDisplay;
 
-  let filterOpen = parseFloat(openingPrices[openingPrices.length - 1]);
+  const filterOpen = parseFloat(openingPrices[openingPrices.length - 1]);
 
   let amountChange = (lastCloseValue - filterOpen).toFixed(2);
   amountChange = amountChange.length > 6 ? (lastCloseValue - filterOpen).toFixed(0) : amountChange;
-  let percentageChange = ((amountChange / filterOpen) * 100).toFixed(2);
+  const percentageChange = ((amountChange / filterOpen) * 100).toFixed(2);
 
   intradayDataDiv.innerHTML = `
     <div class="current-price">${lastCloseDisplay}</div>

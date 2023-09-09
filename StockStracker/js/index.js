@@ -6,10 +6,12 @@ const favoriteStockDiv = document.getElementById('favorites');
 const favoriteStocks = JSON.parse(localStorage.getItem('favoriteStocks')) || [];
 document.getElementById('search-form-id').addEventListener('submit', searchSummit);displayFavoriteStocks();
 initializePage();
+let apiKey;
+
 
 
 async function initializePage() {
-    let apiKey = await fetchAPIKey();
+    apiKey = await fetchAPIKey();
     getMockData().then(displaySearchResults);
     
 }
@@ -25,8 +27,8 @@ async function fetchAPIKey() {
 function searchSummit(event) {
     event.preventDefault();
 
-    let searchTerm = searchInput.value;
-    let endpoint = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${searchTerm}&apikey=${apiKey}`;
+    const searchTerm = searchInput.value;
+    const endpoint = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${searchTerm}&apikey=${apiKey}`;
 
     if (searchTerm === '') {
         event.preventDefault(); 
@@ -61,14 +63,14 @@ function displaySearchResults(data) {
                 <div>${stock['2. name']}</div>
                 <div>${stock['4. region']}</div>               
                 <div>${stock['8. currency']}</div>
-            <button class="add-button" id="confirmBtn-${i}">Follow</button>
+            <button class="add-button" id="confirmButton-${i}">Follow</button>
         </div>
         `;        
     });
 
     searchResultsDiv.innerHTML = accumulatedHTML;
     data.bestMatches.forEach((stock, i) => {
-        const button = document.getElementById(`confirmBtn-${i}`)
+        const button = document.getElementById(`confirmButton-${i}`)
         if (button !== null) {
             button.addEventListener('click', () => addToFavoritesClick(stock))
         }
@@ -91,10 +93,10 @@ function displayFavoriteStocks() {
     favoriteStockDiv.innerHTML = '';
 
     favoriteStocks.forEach(stock => {
-        let stockSymbol = stock['1. symbol'];
-        let stockName = stock['2. name'];
+        const stockSymbol = stock['1. symbol'];
+        const stockName = stock['2. name'];
 
-        let wrapperDiv = document.createElement('div'); 
+        const wrapperDiv = document.createElement('div'); 
         wrapperDiv.className = "favorite-wrapper";      
         let link = document.createElement('a');
         link.href = `details.html`;
@@ -113,7 +115,6 @@ function displayFavoriteStocks() {
 
 
 
-
 async function wait(timeInMs) {
     return new Promise(resolve => setTimeout(resolve, timeInMs));
 }
@@ -124,7 +125,6 @@ async function getMockData() {
     return fetch(`data/mockSearch.json`)
         .then((response) => response.json())
         .catch((error) => console.log(error));   
-      
       
 }
 
