@@ -5,12 +5,14 @@ let stockName = storedStockInfo["2. name"];
 let stockCurrency = storedStockInfo["8. currency"];
 let fundamentalsFromSymbol = JSON.parse(localStorage.getItem(`fundamentalsFrom${stockSymbol}`));
 let weeklyDataInMemory;
+let intradayDataInMemory;
 document.querySelector("h1").textContent = stockSymbol? stockName: "Symbol not found.";
 initializePage();
 
 async function initializePage() {
   const apiKey = await fetchAPIKey();
   fetchStockData(apiKey);
+  setupTimeButtons();
 }
 
 async function fetchAPIKey() {
@@ -105,7 +107,10 @@ function displayGraph([dates, adjustedCloses]) {
   let color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
   const ctx = document.getElementById("my-canvas");
 
-  new Chart(ctx, {
+  if (window.myChart) 
+    window.myChart.destroy();
+
+  myChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: dates,
@@ -153,6 +158,7 @@ function displayGraph([dates, adjustedCloses]) {
 }
 
 function spliceWeeklySeries(data, startDate) {
+  
   weeklyDataInMemory = data;
   const weeklyAdjusted = data["Weekly Adjusted Time Series"];
   const dates = Object.keys(weeklyAdjusted).filter((date) => startDate < new Date(date)).reverse();
@@ -161,7 +167,34 @@ function spliceWeeklySeries(data, startDate) {
   displayGraph([dates, values]);
 }
 
+
+
+function setupTimeButtons(){
+
+  let todaysDate = new Date();
+  let thirtyDaysAgo = new Date(todaysDate-30*365*24*60*60*1000);
+  let fiveYearsAgo = new Date(todaysDate-5*365*24*60*60*1000);
+  let oneYearAgo = new Date(todaysDate-365*24*60*60*1000);
+  let threeMonthsAgo = new Date(todaysDate-3*30*24*60*60*1000);
+  
+
+  let oneWeekAgo = new Date(todaysDate-7*24*60*60*1000);
+  console.log(oneWeekAgo);
+  let oneDayAgo = new Date(todaysDate-24*60*60*1000);
+
+
+  document.getElementById("max").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, thirtyDaysAgo));
+  document.getElementById("five-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, fiveYearsAgo));
+  document.getElementById("one-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, oneYearAgo));
+  document.getElementById("three-month").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, threeMonthsAgo));
+
+
+
+
+}
+
 function displayIntraday(data) {
+  
   let topContainerDiv = document.getElementById("change");
   let intradayDataDiv = document.getElementById("intraday");
 
