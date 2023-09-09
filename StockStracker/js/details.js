@@ -71,38 +71,32 @@ function fetchStockData(apiKey) {
     return;
   }
 
-  // fetch(
-  //   `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     localStorage.setItem(
-  //       `fundamentalsFrom${fundamentalsFromSymbol}`,
-  //       JSON.stringify(data)
-  //     );
-  //     displayStockDescription(data);
-  //     displayKeyStockInfo(data);
-  //   })
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => {
+      localStorage.setItem(
+        `fundamentalsFrom${fundamentalsFromSymbol}`,
+        JSON.stringify(data)
+      );
+      displayStockDescription(data);
+      displayKeyStockInfo(data);
+    })
+    .catch((error) => console.log(error));
 
-  // fetch(
-  //   `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => spliceFromDate(data, new Date(1983,8,7)))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
+    .catch((error) => console.log(error));
 
-  // fetch(
-  //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => displayIntraday(data))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => displayIntraday(data))
+    .catch((error) => console.log(error));
 
-  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
-  getIntradayMock().then(displayIntraday);
-  getFundamentalsMock().then(displayStockDescription);
-  getFundamentalsMock().then(displayKeyStockInfo);
+  // getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
+  // getIntradayMock().then(displayIntraday);
+  // getFundamentalsMock().then(displayStockDescription);
+  // getFundamentalsMock().then(displayKeyStockInfo);
 
 }
 
@@ -110,14 +104,6 @@ function displayGraph([dates, adjustedCloses]) {
   let isPositive = adjustedCloses[adjustedCloses.length - 1] > adjustedCloses[0];
   let color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
   const ctx = document.getElementById("my-canvas");
-
-  console.log("Oldest Adjusted Close:", adjustedCloses[0]);
-  console.log(
-    "Most Recent Adjusted Close:",
-    adjustedCloses[adjustedCloses.length - 1]
-  );
-  console.log("Oldest Date:", dates[0]);
-  console.log("Calculated Color:", color);
 
   new Chart(ctx, {
     type: "line",
@@ -200,7 +186,6 @@ function displayIntraday(data) {
   let percentageChange = ((amountChange / filterOpen) * 100).toFixed(2);
 
   intradayDataDiv.innerHTML = `
-
     <div class="current-price">${lastCloseDisplay}</div>
     <div class="currency">${stockCurrency}</div>`;
 
@@ -208,7 +193,8 @@ function displayIntraday(data) {
     topContainerDiv.innerHTML += `
       <div class="amount-change-up">+${amountChange}</div>
       <div class="percent-change-up">+${percentageChange}%</div>`;
-  } else {
+  } 
+  else {
     topContainerDiv.innerHTML += `
         <div class="amount-change-down">${amountChange}</div>
         <div class="percent-change-down">${percentageChange}%</div>`;
@@ -218,8 +204,6 @@ function displayIntraday(data) {
 async function wait(timeInMs) {
   return new Promise((resolve) => setTimeout(resolve, timeInMs));
 }
-
-
 
 async function getIntradayMock() {
   await wait(500);

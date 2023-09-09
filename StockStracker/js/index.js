@@ -1,4 +1,4 @@
-localStorage.clear();
+//localStorage.clear();
 const searchInput = document.getElementById('search-input');
 const resultDiv = document.getElementById('result-label');
 const searchResultsDiv = document.getElementById('results');
@@ -34,12 +34,12 @@ function searchSummit(event) {
         return; 
     }
     
-    // fetch(endpoint)
-    //     .then(response => response.json())
-    //     .then( displaySearchResults)
-    //     .catch(error => console.log(error));
+    fetch(endpoint)
+        .then(response => response.json())
+        .then( displaySearchResults)
+        .catch(error => console.log(error));
 
-    getMockData().then(displaySearchResults);
+    // getMockData().then(displaySearchResults);
 }  
 
 function displaySearchResults(data) {
@@ -73,8 +73,6 @@ function displaySearchResults(data) {
             button.addEventListener('click', () => addToFavoritesClick(stock))
         }
     });
-
-
 }
 
 
