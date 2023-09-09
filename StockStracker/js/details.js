@@ -73,37 +73,37 @@ function fetchStockData(apiKey) {
     return;
   }
 
-  // fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     localStorage.setItem(
-  //       `fundamentalsFrom${fundamentalsFromSymbol}`,
-  //       JSON.stringify(data)
-  //     );
-  //     displayStockDescription(data);
-  //     displayKeyStockInfo(data);
-  //   })
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => {
+      localStorage.setItem(
+        `fundamentalsFrom${fundamentalsFromSymbol}`,
+        JSON.stringify(data)
+      );
+      displayStockDescription(data);
+      displayKeyStockInfo(data);
+    })
+    .catch((error) => console.log(error));
 
-  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
+    .catch((error) => console.log(error));
 
-  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => displayIntraday(data))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => displayIntraday(data))
+    .catch((error) => console.log(error));
 
-  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
-  getIntradayMock().then(displayIntraday);
-  getFundamentalsMock().then(displayStockDescription);
-  getFundamentalsMock().then(displayKeyStockInfo);
+  // getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
+  // getIntradayMock().then(displayIntraday);
+  // getFundamentalsMock().then(displayStockDescription);
+  // getFundamentalsMock().then(displayKeyStockInfo);
 
 }
 
-function displayGraph([dates, adjustedCloses]) {
-  let isPositive = adjustedCloses[adjustedCloses.length - 1] > adjustedCloses[0];
+function displayGraph([dates, closeingPrices]) {
+  let isPositive = closeingPrices[closeingPrices.length - 1] > closeingPrices[0];
   let color = isPositive ? "rgb(52,199,89)" : "rgb(254,59,48)";
   const ctx = document.getElementById("my-canvas");
 
@@ -117,7 +117,7 @@ function displayGraph([dates, adjustedCloses]) {
       datasets: [
         {
           label: `Stock history ${stockSymbol}`,
-          data: adjustedCloses,
+          data: closeingPrices,
           borderColor: color,
           borderWidth: 1,
           pointRadius: 0,
@@ -141,8 +141,9 @@ function displayGraph([dates, adjustedCloses]) {
           grid: {
             color: "grey",
           },
-        },
+        },        
         y: {
+
           ticks: {
             fontSize: 15,
             color: "white",
@@ -150,14 +151,14 @@ function displayGraph([dates, adjustedCloses]) {
           grid: {
             color: "grey",
           },
-          beginAtZero: true,
+          beginAtZero: false,
         },
       },
     },
   });
 }
 
-function spliceWeeklySeries(data, startDate) {
+function spliceWeeklySeries(data, startDate) { // data argument is needed here despite being a global variable for the first call to work
   
   weeklyDataInMemory = data;
   const weeklyAdjusted = data["Weekly Adjusted Time Series"];
@@ -189,23 +190,31 @@ function spiceItradayForToday() {
 }
 
 
+function fullIntradayMonth() {
+  let data = intradayDataInMemory;
+  const intratradeSeries = data["Time Series (5min)"];
+  let intradayMonthPrices = Object.values(intratradeSeries).map(entry => Number(entry["4. close"])).reverse();
+  let intradayMonthTimestamps = Object.keys(intratradeSeries).map(timestamp => timestamp.split(" ")[0]).reverse();
+
+  displayGraph([intradayMonthTimestamps, intradayMonthPrices]);
+}
+
 
 
 function setupTimeButtons(){
 
   let todaysDate = new Date();
-  let thirtyDaysAgo = new Date(todaysDate-30*365*24*60*60*1000);
+  let thirtyYearsAgo = new Date(todaysDate-30*365*24*60*60*1000);
   let fiveYearsAgo = new Date(todaysDate-5*365*24*60*60*1000);
   let oneYearAgo = new Date(todaysDate-365*24*60*60*1000);
   let threeMonthsAgo = new Date(todaysDate-3*30*24*60*60*1000);
   
 
-
-  document.getElementById("max").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, thirtyDaysAgo));
+  document.getElementById("max").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, thirtyYearsAgo));
   document.getElementById("five-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, fiveYearsAgo));
   document.getElementById("one-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, oneYearAgo));
   document.getElementById("three-month").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, threeMonthsAgo));
-  document.getElementById("today").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, todaysDate));
+  document.getElementById("one-month").addEventListener("click", () => fullIntradayMonth(todaysDate));
   document.getElementById("today").addEventListener("click", () => spiceItradayForToday());
 }
 
@@ -250,6 +259,8 @@ function displayIntraday(data) {
         <div class="percent-change-down">${percentageChange}%</div>`;
   }
 }
+
+
 
 async function wait(timeInMs) {
   return new Promise((resolve) => setTimeout(resolve, timeInMs));
