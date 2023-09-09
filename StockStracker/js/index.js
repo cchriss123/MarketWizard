@@ -38,7 +38,7 @@ function searchSummit(event) {
     
     fetch(endpoint)
         .then(response => response.json())
-        .then( displaySearchResults)
+        .then(displaySearchResults)
         .catch(error => console.log(error));
 
     // getMockData().then(displaySearchResults);
@@ -71,9 +71,9 @@ function displaySearchResults(data) {
     searchResultsDiv.innerHTML = accumulatedHTML;
     data.bestMatches.forEach((stock, i) => {
         const button = document.getElementById(`confirmButton-${i}`)
-        if (button !== null) {
+        if (button !== null) 
             button.addEventListener('click', () => addToFavoritesClick(stock))
-        }
+        
     });
 }
 

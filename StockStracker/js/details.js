@@ -225,7 +225,7 @@ function displayIntraday(data) {
     .map((timestamp) => data["Time Series (5min)"][timestamp]["1. open"]);
 
   const lastCloseValue = parseFloat(closePrices[0]);
-  const lastCloseDisplay = lastCloseValue.toFixed(2);
+  let lastCloseDisplay = lastCloseValue.toFixed(2);
   lastCloseDisplay = lastCloseDisplay.length > 7 ? lastCloseValue.toFixed(0) : lastCloseDisplay;
 
   const filterOpen = parseFloat(openingPrices[openingPrices.length - 1]);
