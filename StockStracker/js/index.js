@@ -1,4 +1,4 @@
-//localStorage.clear();
+localStorage.clear();
 const searchInput = document.getElementById('search-input');
 const resultDiv = document.getElementById('result-label');
 const searchResultsDiv = document.getElementById('results');
@@ -10,7 +10,7 @@ initializePage();
 
 async function initializePage() {
     let apiKey = await fetchAPIKey();
-    // displaySearchResults(getMockData());
+    getMockData().then(displaySearchResults);
     
 }
 
@@ -122,77 +122,12 @@ async function wait(timeInMs) {
 
 
 async function getMockData() {
-    await wait(1000);
-    return {
-        "bestMatches": [
-            {
-                "1. symbol": "HNNA",
-                "2. name": "Hennessy Advisors Inc",
-                "3. type": "Equity",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.6000"
-            },
-            {
-                "1. symbol": "HNNMY",
-                "2. name": "Hennes & Mauritz AB",
-                "3. type": "Equity",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.5455"
-            },
-            {
-                "1. symbol": "HNNAZ",
-                "2. name": "Hennessy Advisors Inc",
-                "3. type": "Equity",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.5455"
-            },
-            {
-                "1. symbol": "HMRZF",
-                "2. name": "Hennes & Mauritz AB - Class B",
-                "3. type": "Equity",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.3429"
-            },
-            {
-                "1. symbol": "HBFBX",
-                "2. name": "HENNESSY BALANCED FUND INVESTOR CLASS",
-                "3. type": "Mutual Fund",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.2791"
-            },
-            {
-                "1. symbol": "HCBFX",
-                "2. name": "HENNESSY CORE BOND FUND INVESTOR CLASS",
-                "3. type": "Mutual Fund",
-                "4. region": "United States",
-                "5. marketOpen": "09:30",
-                "6. marketClose": "16:00",
-                "7. timezone": "UTC-04",
-                "8. currency": "USD",
-                "9. matchScore": "0.2727"
-            }
-        ]
-    };
+    await wait(500);
+    return fetch(`data/mockSearch.json`)
+        .then((response) => response.json())
+        .catch((error) => console.log(error));   
+      
+      
 }
 
 

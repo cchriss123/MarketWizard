@@ -10,8 +10,8 @@
   display: flex;
   flex-wrap:wrap;
   margin-bottom: 40px;
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
+  border-radius: 10px;
+
   gap: 20px;
   padding-top: 15px;
   padding-bottom: 25px;
@@ -22,14 +22,16 @@
 .favorite-wrapper {
   
 
-  border-bottom: 1px solid gray;
+  background-color: rgb(36,36,36);
   box-sizing: border-box; 
   padding: 15px;
   color: white; 
-  width: calc(50% - 10px);
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: 10px;
+
   
 }
 
@@ -234,7 +236,9 @@ margin-bottom: 5px;
 @media screen and (min-width: 768px) {
   .main-container, .top-container{
     width: 600px;           
-
+  }
+  .favorite-wrapper {
+    width: calc(50% - 10px);
   }
 }
 
@@ -247,7 +251,7 @@ margin-bottom: 5px;
     width: calc(33% - 5px);
   }
   .favorite-wrapper {
-    width: calc(33% - 11px);
+    width: calc(50% - 10px);
   }
 }
 
