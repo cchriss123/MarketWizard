@@ -83,28 +83,28 @@ function displayKeyStockInfo(data) {
 function fetchStockData(apiKey) {
 
 
-  // fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     displayStockDescription(data);
-  //     displayKeyStockInfo(data);
-  //   })
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => {
+      displayStockDescription(data);
+      displayKeyStockInfo(data);
+    })
+    .catch((error) => console.log(error));
 
-  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => spliceWeeklySeries(data, new Date(1983,8,7)))
+    .catch((error) => console.log(error));
 
-  // fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
-  //   .then((response) => response.json())
-  //   .then((data) => displayIntraday(data))
-  //   .catch((error) => console.log(error));
+  fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&outputsize=full&apikey=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => displayIntraday(data))
+    .catch((error) => console.log(error));
 
-  getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
-  getIntradayMock().then(displayIntraday);
-  getFundamentalsMock().then(displayStockDescription);
-  getFundamentalsMock().then(displayKeyStockInfo);
+  // getHistoryMock().then((data) => spliceWeeklySeries(data, new Date(1983,8,7)));
+  // getIntradayMock().then(displayIntraday);
+  // getFundamentalsMock().then(displayStockDescription);
+  // getFundamentalsMock().then(displayKeyStockInfo);
 
 }
 
