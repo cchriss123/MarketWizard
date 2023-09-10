@@ -5,35 +5,42 @@
 .intraday-outer {
     display: flex;
     flex-wrap: row;
-    max-width: 530px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     justify-content: space-between;
     margin-bottom: 22px;
     margin-top: 22px;
+    align-items: center;    
+
+    
 }
 
 .intraday-inner {
     
+    align-items: center;
     border-radius: 10px;
     display: flex;
     flex-wrap: row;
     font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    gap : 5px;
     background-color: rgb(53,53,53);
 }
 
 .current-price {
-    font-size: 28px;
+    font-size: 22px;
+    padding-left: 10px;
+   
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .currency {
-    font-size: 16px;
-    margin-top: 12px;
+    font-size: 14px;
+    padding-right: 10px;
+    margin-top: 6px;
+
 }
 
 
@@ -41,56 +48,34 @@
     display: flex;
     flex-wrap: row;
     font-weight: bold;
-    gap: 10px;
+    gap: 5px;
+    
 }
 
 
-.amount-change-up {
-    font-size: 28px;
-    border-radius: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+.amount-change-up, .percent-change-up {
     color: rgb(52,199,89);
-    background-color: rgb(53,53,53);
 }
 
-.percent-change-up {
-    font-size: 28px;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: rgb(52,199,89);
-    background-color: rgb(53,53,53);
-}
-.amount-change-down {
-    font-size: 28px;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+.amount-change-down, .percent-change-down {
     color: rgb(254,59,48);
-    background-color: rgb(53,53,53);
+}
 
-}
-.percent-change-down {
-    font-size: 28px;
+
+.percent-change-down, .amount-change-down,  .percent-change-up, .amount-change-up {
+    background-color: rgb(53,53,53);
+    font-size: 18px;
     border-radius: 10px;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    color: rgb(254,59,48);
-    background-color: rgb(53,53,53);
+
 
 }
 
 .description-container {
-    max-width: 500px;
+
     width: 100%;            
     margin-left: auto;      
     margin-right: auto;
@@ -100,11 +85,13 @@
     background-color: rgb(53,53,53);
     background-color: rgb(53,53,53);
     border-radius: 10px;
+    box-sizing: border-box;  
     padding: 15px;
+    font-size: 14px;
 }
 
 .data-container {
-    width: 500px;
+    width: 100%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;    
@@ -123,19 +110,20 @@
 
     background-color: rgb(53,53,53);
     border-radius: 10px;
-    
     padding: 15px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column; 
     align-items: center; 
-    box-sizing: border-box;
+    width: 100%;
     
 }
 
 
  .chart-container {
-    height: 350px;
-    width: 500px;
+    height: 300px;
+
+    width: 100%;
     padding: 10px;
     box-sizing: border-box;
     border: 1px solid rgb(73,73,73);
@@ -154,8 +142,7 @@
     border-right-color: rgb(36,36,36);
     font-size: 16px;
     padding: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
+
 }
 
 .time-button:hover {
@@ -177,12 +164,17 @@
 .infoList {
     grid-row-gap: 3px;
     display: grid;
-    grid-template-columns: 250px 250px;
+    grid-template-columns: 50% 50%;
+    width: 100%;
     padding: 15px;
     border-radius: 10px;
     background-color: rgb(53,53,53);
-    
-
+    box-sizing: border-box;
+    gap: 10px;
+    font-size: 14px;
+}
+#StockInfo{
+    width: 100%;
 }
 
 
@@ -214,49 +206,61 @@
 }
 
 
+@media screen and (min-width: 600px) {
 
-
-@media screen and (min-width: 768px) {
-    .description-container {
-        max-width: 670px;
+    .description-container, .data-container, .intraday-outer {
+        max-width: 90%
     }
 
     .chart-container {
-        width: 670px;
-        height: 450px;
-    }
-    .infoList {
-        grid-template-columns: 335px 335px;
-    }
-    .intraday-outer{  
-        max-width: 700px;
+        height: 500px;
     }
 
+    .time-button{
+        font-size: 18px;
+        padding: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .current-price, .percent-change-down, .percent-change-up, .amount-change-down, .amount-change-up {
+        font-size: 28px;
+    }
+
+    .currency {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
+    .currency {
+        font-size: 16px;
+    }
+    .description-container {
+        font-size: 16px;
+    }
+    .infoList {
+        font-size: 16px;
+        gap: 2px;
+    }
+ 
 }
-/* Desktop */
+
 @media screen and (min-width: 1200px) {
 
-    .description-container {
-        max-width: 1070px;
+    .description-container, .data-container, .intraday-outer {
+        max-width: 75%
     }
-
+    #StockInfo{
+        width: calc(50% - 15px);
+    }
+    .chart-container-outer {
+        width: calc(50% - 15px);
+    }
     .chart-container {
-        width: 500px;
-        height: 350px;
-   
-
-
-    }
-    .infoList {
-        grid-template-columns: 250px 250px;
-      
-       
-
-    }
-
-    .intraday-outer{
-        max-width: 1100px;
-    }
+        height: 380px;
+    }   
 }
+
+
 
 

@@ -50,6 +50,8 @@ function displayKeyStockInfo(data) {
         <div>${getValue(data.EBITDA)}</div>
         <div>PE Ratio:</div>
         <div>${getValue(data.PERatio)}</div>
+        <div>Forward PE:</div>
+        <div>${getValue(data.ForwardPE)}</div>
         <div>Dividend Per Share:</div>
         <div>${getValue(data.DividendPerShare)}</div>
         <div>Dividend Yield:</div>
@@ -68,8 +70,7 @@ function displayKeyStockInfo(data) {
         <div>${getValue(data.ReturnOnEquityTTM)}</div>
         <div>Analyst Target Price:</div>
         <div>${getValue(data.AnalystTargetPrice)}</div>
-        <div>Forward PE:</div>
-        <div>${getValue(data.ForwardPE)}</div>
+ 
         <div>EV To EBITDA:</div>
         <div>${getValue(data.EVToEBITDA)}</div>
         <div>Price To Book:</div>
@@ -125,7 +126,7 @@ function displayGraph([dates, closeingPrices]) {
           label: `Stock history ${stockSymbol}`,
           data: closeingPrices,
           borderColor: color,
-          borderWidth: 1,
+          borderWidth: 2,
           pointRadius: 0,
         },
       ],
@@ -174,7 +175,7 @@ function spliceWeeklySeries(data, startDate) { // data argument is needed here d
   displayGraph([dates, values]);
 }
 
-function spiceItradayForToday() {
+function spliceItradayForToday() {
 
   const data = intradayDataInMemory;
   const latestDate = data["Meta Data"]["3. Last Refreshed"].split(" ")[0];
@@ -187,10 +188,10 @@ function spiceItradayForToday() {
     .reverse();
 
 
-    const closeTimes = Object.keys(data["Time Series (5min)"])
-    .slice(0, closePrices.length)
-    .map(timestamp => timestamp.split(" ")[1].split(":").slice(0, 2).join(":"))
-    .reverse();
+  const closeTimes = Object.keys(data["Time Series (5min)"])
+  .slice(0, closePrices.length)
+  .map(timestamp => timestamp.split(" ")[1].split(":").slice(0, 2).join(":"))
+  .reverse();
 
   displayGraph([closeTimes, closePrices]);
 }
@@ -220,8 +221,8 @@ function setupTimeButtons(){
   document.getElementById("five-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, fiveYearsAgo));
   document.getElementById("one-year").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, oneYearAgo));
   document.getElementById("three-month").addEventListener("click", () => spliceWeeklySeries(weeklyDataInMemory, threeMonthsAgo));
-  document.getElementById("one-month").addEventListener("click", () => fullIntradayMonth(todaysDate));
-  document.getElementById("today").addEventListener("click", () => spiceItradayForToday());
+  document.getElementById("one-month").addEventListener("click", () => fullIntradayMonth());
+  document.getElementById("today").addEventListener("click", () => spliceItradayForToday());
 }
 
 function displayIntraday(data) {
