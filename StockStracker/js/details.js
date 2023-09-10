@@ -31,35 +31,51 @@ function displayKeyStockInfo(data) {
   const getValue = (value) => (value ? value : "N/A"); // Sets value to "N/A" if value is undefined
 
   const fundamentalsHTML = `
-      <div class="infoList">
-          <div>Symbol:</div>
-          <div>${getValue(data.Symbol)}</div>
-          <div>Name:</div>
-          <div>${getValue(data.Name)}</div>
-          <div>Exchange:</div>
-          <div>${getValue(data.Exchange)}</div>
-          <div>Currency:</div>
-          <div>${getValue(data.Currency)}</div>
-          <div>Country:</div>
-          <div>${getValue(data.Country)}</div>
-          <div>Sector:</div>
-          <div>${getValue(data.Sector)}</div>
-          <div>Market Capitalization:</div>
-          <div>${getValue(data.MarketCapitalization)}</div>
-          <div>EBITDA:</div>
-          <div>${getValue(data.EBITDA)}</div>
-          <div>PE Ratio:</div>
-          <div>${getValue(data.PERatio)}</div>
-          <div>Dividend Per Share:</div>
-          <div>${getValue(data.DividendPerShare)}</div>
-          <div>Dividend Yield:</div>
-          <div>${getValue(data.DividendYield)}</div>
-          <div>EPS:</div>
-          <div>${getValue(data.EPS)}</div>
-          <div>Dividend Date:</div>
-          <div>${getValue(data.DividendDate)}</div>
-      </div>
-  `;
+    <div class="infoList">
+        <div>Symbol:</div>
+        <div>${getValue(data.Symbol)}</div>
+        <div>Name:</div>
+        <div>${getValue(data.Name)}</div>
+        <div>Exchange:</div>
+        <div>${getValue(data.Exchange)}</div>
+        <div>Currency:</div>
+        <div>${getValue(data.Currency)}</div>
+        <div>Country:</div>
+        <div>${getValue(data.Country)}</div>
+        <div>Sector:</div>
+        <div>${getValue(data.Sector)}</div>
+        <div>Market Capitalization:</div>
+        <div>${getValue(data.MarketCapitalization)}</div>
+        <div>EBITDA:</div>
+        <div>${getValue(data.EBITDA)}</div>
+        <div>PE Ratio:</div>
+        <div>${getValue(data.PERatio)}</div>
+        <div>Dividend Per Share:</div>
+        <div>${getValue(data.DividendPerShare)}</div>
+        <div>Dividend Yield:</div>
+        <div>${getValue(data.DividendYield)}</div>
+        <div>EPS:</div>
+        <div>${getValue(data.EPS)}</div>
+        <div>Profit Margin:</div>
+        <div>${getValue(data.ProfitMargin)}</div>
+        <div>Revenue TTM:</div>
+        <div>${getValue(data.RevenueTTM)}</div>
+        <div>Gross Profit TTM:</div>
+        <div>${getValue(data.GrossProfitTTM)}</div>
+        <div>Return On Assets TTM:</div>
+        <div>${getValue(data.ReturnOnAssetsTTM)}</div>
+        <div>Return On Equity TTM:</div>
+        <div>${getValue(data.ReturnOnEquityTTM)}</div>
+        <div>Analyst Target Price:</div>
+        <div>${getValue(data.AnalystTargetPrice)}</div>
+        <div>Forward PE:</div>
+        <div>${getValue(data.ForwardPE)}</div>
+        <div>EV To EBITDA:</div>
+        <div>${getValue(data.EVToEBITDA)}</div>
+        <div>Price To Book:</div>
+        <div>${getValue(data.PriceToBookRatio)}</div>
+    </div>
+`;
 
   stockInfoDiv.innerHTML = fundamentalsHTML;
 }

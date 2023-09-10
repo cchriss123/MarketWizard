@@ -181,6 +181,7 @@
     padding: 15px;
     border-radius: 10px;
     background-color: rgb(53,53,53);
+    
 
 }
 
@@ -242,14 +243,13 @@
     .chart-container {
         width: 500px;
         height: 350px;
-        margin-right: 15px;
    
 
 
     }
     .infoList {
         grid-template-columns: 250px 250px;
-        height: 300px;
+      
        
 
     }
